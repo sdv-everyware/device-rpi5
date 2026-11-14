@@ -1,8 +1,8 @@
 # sdv_media_rpi5
 
 SDV media on the Raspberry Pi 5: SDV core, the house's service bundles, the smart home panel
-on harry and its browser, and no Java framework. The same product as
-`device/rb3/sdv_media_db845c` on another board. Choices and sources: [PLAN.md](PLAN.md).
+on harry (its browser is experimental and off by default), and no Java framework. The same
+product as `device/rb3/sdv_media_db845c` on another board. Choices and sources: [PLAN.md](PLAN.md).
 
 ## Build
 
@@ -58,8 +58,9 @@ adb reboot
 ```
 
 Check: `adb shell getprop ro.sdv.profile` (media), `adb shell ls -l /dev/dri` (card0 v3d,
-card1 vc4, renderD128), `adb logcat -s net_bringup dhcpclient`. The browser's Debian root is
-set up once per board as on the RB3 (`vendor/sdv-everyware/everyware/docs/project/browser.md`).
+card1 vc4, renderD128), `adb logcat -s net_bringup dhcpclient`. The experimental browser
+(built with `EVERYWARE_EXPERIMENTAL_BROWSER=true`) needs its Debian root, set up once per board
+as on the RB3 (`vendor/sdv-everyware/everyware/docs/project/browser.md`).
 
 SELinux is permissive and the device identity uses Google's public test secrets: development
 only.

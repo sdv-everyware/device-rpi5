@@ -16,7 +16,8 @@ import /product/etc/init/chronyd.rc
 import /vendor/etc/init/android.sdv.hardware.security.keymint-service.nonsecure.rc
 
 import /vendor/etc/init/init.sdv_rpi5.rc
-# the panel's browser (vendor/sdv-everyware/everyware/product/everyware_browser.rc)
+# the panel's browser (vendor/sdv-everyware/everyware/product/everyware_browser.rc): experimental,
+# installed only with EVERYWARE_EXPERIMENTAL_BROWSER=true; init skips a missing import
 import /vendor/etc/init/everyware_browser.rc
 import /vendor/etc/init/bluetooth-service-default.rc
 

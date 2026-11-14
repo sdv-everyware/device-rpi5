@@ -1,6 +1,6 @@
 # sdv_media_rpi5: SDV Media (SDV core, apps on harry, no Java framework) on the Raspberry Pi 5.
 # The same product as device/rb3/sdv_media_db845c, on another board: SDV core base with its
-# own root init (BoardConfig.mk), the house's bundles, the panel and its browser. The board
+# own root init (BoardConfig.mk), the house's bundles, the panel (its browser is experimental and off by default). The board
 # layer is this folder; PLAN.md lists what comes from where.
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)

@@ -3,7 +3,7 @@
 Goal: on a Raspberry Pi 5 the same system as on the RB3 (`device/rb3/sdv_media_db845c`): SDV
 core without the Java framework, the house's service bundles (weather, news, Wi-Fi, Matter,
 system, dashboard), the panel from its vendor APEX (`com.everyware.smarthome`) with Wayland
-zones, the browser (Cog) in a Debian root, Wi-Fi with DHCP, settings in `user_preferences`.
+zones, the browser (Cog, experimental, off by default) in a Debian root, Wi-Fi with DHCP, settings in `user_preferences`.
 
 "The latest version" is taken as the Raspberry Pi 5 (BCM2712). The same image boots a Pi 500
 and a CM5 (their device trees are on the boot partition); see "Other boards".
@@ -66,7 +66,7 @@ namespaces, bootconfig, `MODULE_SIG_FORCE`.
 | Part | From |
 |---|---|
 | SDV core, identity, service discovery on one device | `device/google/sdv`, as in `sdv_media_db845c.mk` |
-| House's bundles, browser service, dnsproxyd, chrony | `vendor/sdv-everyware`, inherited as on the RB3 |
+| House's bundles, browser service (experimental, with the flag), dnsproxyd, chrony | `vendor/sdv-everyware`, inherited as on the RB3 |
 | The panel | `com.everyware.smarthome` from `packages/services/display_safety/utils/smarthome-app` |
 | Copied from `device/rb3/sdv_media_db845c` | `sepolicy/system_ext/*` (same), `sepolicy/vendor/*.te` and `property_contexts` (same), `vintf/`, `ethernet/`, `net/net_bringup.sh` (without the modem start), `init.sdv_media.rc` (board imports changed), `init.sdv_media_rpi5.rc`, the cmdline keys |
 | From the reference | kernel, device trees, overlays (`device/brcm/rpi5-kernel`), Mesa (`external/mesa3d-rpi`), `boot/config.txt`, the USB gadget and device node rules, the MBR layout |
