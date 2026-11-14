@@ -1,0 +1,18 @@
+# The board's firmware reads this file from the card's FAT partition (tools/mkimg.sh). Based on
+# the reference port's boot/config.txt (raspberry-vanilla, device/brcm/rpi5); camera and panel
+# overlays left out (not used here).
+
+# the kernel (16 KiB pages) and the build's ramdisk (first stage init and the fstab)
+kernel=Image
+initramfs ramdisk.img followkernel
+
+# the display through vc4 (KMS) and the GPU through v3d; the panel drives KMS itself
+dtoverlay=vc4-kms-v3d
+dtoverlay=cma,cma-320
+disable_overscan=1
+
+# adb over the USB-C port
+dtoverlay=dwc2,dr_mode=peripheral
+[cm5]
+dtoverlay=dwc2,dr_mode=otg
+[all]
