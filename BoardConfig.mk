@@ -69,8 +69,10 @@ BOARD_VENDOR_SEPOLICY_DIRS += device/rpi5/sdv_media_rpi5/sepolicy/vendor
 # The kernel's arguments: build/tasks/rpiboot.mk writes them to cmdline.txt. There is no
 # bootconfig on this board, so the androidboot.* keys of the RB3's bootconfig go here; init
 # reads them from the kernel command line the same way.
+# The Wi-Fi and Bluetooth firmware is built into the kernel (CONFIG_EXTRA_FIRMWARE), so no
+# firmware_class.path. The line is about 1 KB; the firmware adds its own arguments, the arm64
+# kernel takes 2048 bytes.
 BOARD_KERNEL_CMDLINE := console=ttyAMA10,115200 loglevel=4 printk.devkmsg=on
-BOARD_KERNEL_CMDLINE += firmware_class.path=/vendor/firmware/
 BOARD_KERNEL_CMDLINE += androidboot.hardware=rpi5
 
 # The card (tools/mkimg.sh): MBR, as the reference port and the board's firmware use it. MBR

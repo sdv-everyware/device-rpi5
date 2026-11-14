@@ -83,10 +83,12 @@ overwritten. Measured on 2026-11-14.
 | `external/mesa3d-rpi` | github.com/raspberry-vanilla/android_external_mesa3d-rpi | b3a45716baeee3237350d9209a00717cd10a4d6c (2026-11-10, Mesa 26.3.0) | 629 MB (135 MB .git) |
 | (removed) `vendor/brcm` | github.com/raspberry-vanilla/proprietary_vendor_brcm | d233de997b7115a42a164f5a59fc3c3ebf3f9bf4 | 11 MB; the kernel image holds the same files byte for byte, so not needed |
 
-Changes on top of the downloads: `external/mesa3d-rpi`, branch `feature/rpi5`: a
-`soong_namespace` and `soc_specific: true` in `Android.bp`, the two APEX folders' `Android.bp`
-renamed to `Android.bp.disabled`. Without the namespace every other product of the tree failed
-in Soong (the static libraries had no vendor variant).
+Changes on top of the downloads: `external/mesa3d-rpi`, branch `feature/rpi5`, two commits:
+a `soong_namespace`, `soc_specific: true` and the Android header libraries (liblog, cutils,
+hardware, system, nativebase, drm) in the defaults of `Android.bp`; the two APEX folders'
+`Android.bp` renamed to `Android.bp.disabled`. Without the namespace every other product of
+the tree failed in Soong (the static libraries had no vendor variant); without the header
+libraries the vendor variant did not compile (`android/log.h` not found).
 
 Read only, outside the tree: the reference's device repository and minigbm fork, its manifests.
 
@@ -111,6 +113,12 @@ restarts in a loop without a picture.
 | Pi 500 | nothing in the image (`bcm2712-rpi-500.dtb` is on the card); its USB-C port is power only, so adb only over the network or not at all |
 | CM5 with eMMC | the eMMC sits on the same controller as the SD card (mmcblk0); the image is written with `rpiboot` (usbboot) instead of a card reader; `config.txt` already switches dwc2 to OTG |
 | CM5 Lite, or a Pi 5 booting from USB or NVMe | `androidboot.boot_devices` and `partition_map` name another device; a second `BOARD_KERNEL_CMDLINE` for it |
+
+## State
+
+2026-11-14: built (`m`, `raspberry_out`: 46 GB), card image made with `tools/mkimg.sh`
+(6.4 GB, 0.65 GB on disk), checked offline (FAT files and overlays, super metadata with the
+`_a` partitions, empty metadata, misc and userdata). Not booted on a board yet.
 
 ## Next steps
 
