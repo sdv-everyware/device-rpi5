@@ -1,0 +1,6 @@
+# The media profile on the board (the graphics stack itself is Mesa's).
+
+on early-init
+    # with these set libEGL does not ask the configstore HAL, which is not running
+    setprop ro.surface_flinger.has_wide_color_display true
+    setprop ro.surface_flinger.has_HDR_display false

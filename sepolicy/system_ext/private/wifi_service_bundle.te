@@ -1,0 +1,13 @@
+# The Wi-Fi service bundle: everything a service bundle may do (the SDV comm stack), plus a
+# datagram socket of its own for the supplicant's control interface. The supplicant's side
+# (an abstract unix socket served by the vendor domain net_bringup) is in sepolicy/vendor,
+# where that type is known. Why: bundles/wifi/README.md.
+typeattribute wifi_service_bundle coredomain;
+# A socket from a core domain to a vendor one (the supplicant's) is a Treble violation in
+# general; this image has no framework and owns both sides (device/rpi5), so it is marked
+# on purpose: bundles/wifi/README.md.
+typeattribute wifi_service_bundle socket_between_core_and_vendor_violators;
+service_bundle_domain(wifi_service_bundle)
+allow wifi_service_bundle self:unix_dgram_socket create_socket_perms;
+# tokio sizes its worker pool from the CPU quota of the process's cgroup.
+allow wifi_service_bundle cgroup:file { getattr open read };

@@ -1,0 +1,11 @@
+# The screen link: client and server call each other (the command sink goes back to the client).
+binder_call(everyware_screen_client, everyware_screen_server)
+binder_call(everyware_screen_server, everyware_screen_client)
+
+allow everyware_screen_server everyware_screen_service:service_manager { add find };
+allow everyware_screen_client everyware_screen_service:service_manager find;
+neverallow { domain -everyware_screen_server } everyware_screen_service:service_manager add;
+
+# The client: the bundles' shared domain until the dashboard bundle has a domain of its own
+# (sdv-everyware/everyware#54). The panel checks the caller's SDV identity in any case.
+typeattribute untrusted_service_bundle everyware_screen_client;

@@ -1,0 +1,4 @@
+# The Wi-Fi service bundle (vendor/sdv-everyware/everyware/bundles/wifi): a service bundle
+# domain of its own, the one allowed to talk to wpa_supplicant's control interface. The SDV
+# lifecycle manager puts the bundle into it through /product/etc/service_bundle_contexts.
+type wifi_service_bundle, domain;

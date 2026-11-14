@@ -1,0 +1,71 @@
+# The board's init: the cpusets of four cores, adb over the USB-C port, Wi-Fi with DHCP and the
+# clock. In place of the reference port's init.rpi5.rc, which mounts the fstab a second time
+# and waits for framework triggers that never come.
+
+on init
+    write /dev/cpuset/foreground/cpus 0-3
+    write /dev/cpuset/background/cpus 0-3
+    write /dev/cpuset/system-background/cpus 0-3
+    write /dev/cpuset/top-app/cpus 0-3
+
+on post-fs
+    setrlimit 8 67108864 67108864
+
+# the framework creates these on zygote-start, which never comes here
+on post-fs-data
+    mkdir /data/vendor/wifi 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
+
+on boot
+    # SDV init has no class_start for these classes
+    class_start hal
+    # Wi-Fi with DHCP: the driver and its firmware are in the kernel, so wlan0 is there early
+    start vendor.net_bringup
+    # chronyd restores the clock from its drift file; the RTC (rpi-rtc) is built into the kernel
+    wait /dev/rtc0 2
+    start chronyd
+
+service vendor.net_bringup /vendor/bin/net_bringup.sh
+    user root
+    group system wifi inet net_admin net_raw
+    disabled
+    oneshot
+
+# on the lease chronyd resolves its servers again at once instead of backing off for minutes
+on property:vendor.net.wlan0.dns1=*
+    exec_background - system system -- /product/bin/chrony_refresh.sh wlan0
+
+# adb over the USB-C port: dwc2 in device mode (dtoverlay=dwc2,dr_mode=peripheral in
+# config.txt), as the reference port's init.rpi5.usb.rc sets it up, with the adb function only
+on boot
+    mount configfs none /config
+    mkdir /config/usb_gadget/g1 0770 shell shell
+    mkdir /config/usb_gadget/g1/strings/0x409 0770 shell shell
+    write /config/usb_gadget/g1/bcdUSB 0x0200
+    write /config/usb_gadget/g1/idVendor 0x18d1
+    write /config/usb_gadget/g1/idProduct 0x4ee7
+    write /config/usb_gadget/g1/strings/0x409/serialnumber ${ro.serialno}
+    write /config/usb_gadget/g1/strings/0x409/manufacturer "Raspberry Pi"
+    write /config/usb_gadget/g1/strings/0x409/product "SDV media on Raspberry Pi 5"
+    mkdir /config/usb_gadget/g1/functions/ffs.adb
+    mkdir /config/usb_gadget/g1/configs/b.1 0770 shell shell
+    mkdir /config/usb_gadget/g1/configs/b.1/strings/0x409 0770 shell shell
+    write /config/usb_gadget/g1/configs/b.1/MaxPower 500
+    mkdir /dev/usb-ffs 0775 shell shell
+    mkdir /dev/usb-ffs/adb 0770 shell shell
+    mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
+    setprop sys.usb.controller 1000480000.usb
+    setprop sys.usb.configfs 1
+
+# adbd started before the USB gadget existed: restart it once the gadget is set up
+on property:sys.usb.configfs=1 && property:ro.boot.adb.enabled=1
+    setprop sys.usb.config adb
+    restart adbd
+
+# From system/core/rootdir/init.usb.configfs.rc
+on property:sys.usb.ffs.ready=1 && property:sys.usb.config=adb && property:sys.usb.configfs=1
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "adb"
+    symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f1
+    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}

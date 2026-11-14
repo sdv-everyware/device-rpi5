@@ -1,0 +1,6 @@
+# The screen link (vendor/sdv-everyware/everyware/interfaces/screen): the panel (vendor) serves it,
+# the dashboard bundle calls it. Shaped as a HAL (system/sepolicy private/hal_threadnetwork.te),
+# but not one: a hal_*_server may not open sockets or the audio device, and the panel does both.
+attribute everyware_screen_client;
+attribute everyware_screen_server;
+type everyware_screen_service, service_manager_type;

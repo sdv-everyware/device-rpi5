@@ -1,0 +1,11 @@
+# The board's device nodes (imported by the core base's /vendor/etc/ueventd.rc).
+
+# GPU: card0 and renderD128 are v3d, card1 is vc4 (the display controller)
+/dev/dri/card*            0660   system     graphics
+/dev/dri/renderD*         0666   system     graphics
+
+# the Bluetooth controller's switch (the HAL)
+/dev/rfkill               0660   bluetooth  bluetooth
+
+# the USB-C port in device mode (adb)
+/sys/class/udc/1000480000.usb  current_speed  0664  system  system

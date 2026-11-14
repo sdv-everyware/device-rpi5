@@ -1,0 +1,4 @@
+# The System service bundle (vendor/sdv-everyware/everyware/bundles/system): a service bundle
+# domain of its own, the one allowed to set the system's time zone. The SDV lifecycle manager
+# puts the bundle into it through /product/etc/service_bundle_contexts.
+type system_service_bundle, domain;

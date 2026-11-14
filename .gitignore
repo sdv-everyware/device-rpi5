@@ -1,0 +1,4 @@
+# working copies kept next to the files
+*.v-*
+*.orig
+*.rej

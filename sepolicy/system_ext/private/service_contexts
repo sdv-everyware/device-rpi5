@@ -1,0 +1,2 @@
+# The screen link the panel serves (vendor/sdv-everyware/everyware/interfaces/screen)
+com.everyware.screen.IScreenLink/default    u:object_r:everyware_screen_service:s0

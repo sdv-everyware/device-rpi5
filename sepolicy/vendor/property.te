@@ -1,0 +1,2 @@
+# the Wi-Fi lease of dhcpclient: set by vendor, readable by every domain (dnsproxyd)
+vendor_restricted_prop(vendor_net_wlan0_prop)

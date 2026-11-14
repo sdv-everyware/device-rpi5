@@ -1,0 +1,4 @@
+# The Matter service bundle (vendor/sdv-everyware/everyware/bundles/matter): a service bundle
+# domain of its own, the one with the house's network (UDP, multicast). The SDV lifecycle
+# manager puts the bundle into it through /product/etc/service_bundle_contexts.
+type matter_service_bundle, domain;

@@ -1,0 +1,12 @@
+<!-- What the product partition expects of the vendor: the screen link the dashboard bundle
+     calls (vendor/sdv-everyware/everyware/interfaces/screen), served by the panel's APEX. -->
+<compatibility-matrix version="1.0" type="framework">
+    <hal format="aidl">
+        <name>com.everyware.screen</name>
+        <version>1</version>
+        <interface>
+            <name>IScreenLink</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+</compatibility-matrix>

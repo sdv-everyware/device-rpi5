@@ -1,0 +1,8 @@
+# The System service bundle: everything a service bundle may do (the SDV comm stack), plus the
+# time zone. It owns the device's time settings in user_preferences and applies the time zone
+# through persist.sys.timezone, which bionic reads; no other bundle may change it.
+typeattribute system_service_bundle coredomain;
+service_bundle_domain(system_service_bundle)
+set_prop(system_service_bundle, timezone_prop)
+# tokio sizes its worker pool from the CPU quota of the process's cgroup.
+allow system_service_bundle cgroup:file { getattr open read };

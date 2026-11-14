@@ -1,0 +1,13 @@
+# The Matter service bundle: everything a service bundle may do (the SDV comm stack), plus the
+# network as AOSP gives it to a network client (net_domain): UDP sockets bound to Matter's port
+# and to mDNS's 5353 with the multicast groups joined, and the interface queries (netlink route,
+# the interface ioctls). The other bundles reach the network only through SDV's agents.
+# Why: bundles/matter/README.md.
+typeattribute matter_service_bundle coredomain;
+service_bundle_domain(matter_service_bundle)
+net_domain(matter_service_bundle)
+# tokio sizes its worker pool from the CPU quota of the process's cgroup.
+allow matter_service_bundle cgroup:file { getattr open read };
+# The Matter stack lists the IPv6 addresses of the interfaces for mDNS
+# (/proc/<pid>/net/if_inet6).
+allow matter_service_bundle proc_net:file { getattr open read };

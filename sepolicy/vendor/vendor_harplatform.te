@@ -1,0 +1,3 @@
+# The panel (HAR's UI process domain) serves the screen link to the dashboard bundle
+# (smarthome-app src/screen_binder.rs).
+typeattribute vendor_harplatform everyware_screen_server;

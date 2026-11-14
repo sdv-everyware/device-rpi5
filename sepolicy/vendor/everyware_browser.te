@@ -1,0 +1,13 @@
+# everyware-browser.sh and what it starts: the launcher of the Debian root, and in the root
+# Cog, its D-Bus bus and the relay (docs/project/browser.md of everyware). Permissive while the
+# denials are collected, as net_bringup: the rules of a chroot with a foreign userland are
+# written from what an enforcing run would deny.
+type everyware_browser, domain;
+type everyware_browser_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(everyware_browser)
+permissive everyware_browser;
+
+# everyware-browser.sh keeps the browser only while the panel listens on its Wayland socket:
+# it reads /proc/net/unix for a listening socket at the panel's path (a file left behind by a
+# stopped panel is not one). This shows the paths of every unix socket on the device, no data.
+allow everyware_browser proc_net:file r_file_perms;

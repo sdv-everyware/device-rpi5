@@ -1,0 +1,39 @@
+# The root init (androidboot.init_rc): init reads this file and nothing else, so every rc the
+# board needs is imported here by name.
+
+import /system/etc/init/init.sdv_core_base.rc
+# DICE from a test file (no hypervisor to provide /dev/open-dice0); after the core base, whose service it overrides
+import /system_ext/etc/init/init_open_dice_from_file_service.rc
+import /product/etc/init/vvmtruststore.preprovisioned.rc
+import /system/etc/init/init.sdv_media_rpi5.rc
+# adb remount on a userdebug build: remount waits for gsid, and the scratch files are cleaned
+# after a boot (android-17.0.0_r1's core base does not import them yet)
+import /system/etc/init/gsid.rc
+import /system/etc/init/clean_scratch_files.rc
+import /product/etc/init/dnsproxyd.rc
+import /product/etc/init/chronyd.rc
+
+import /vendor/etc/init/android.sdv.hardware.security.keymint-service.nonsecure.rc
+
+import /vendor/etc/init/init.sdv_rpi5.rc
+# the panel's browser (vendor/sdv-everyware/everyware/product/everyware_browser.rc)
+import /vendor/etc/init/everyware_browser.rc
+import /vendor/etc/init/bluetooth-service-default.rc
+
+on boot
+    start console
+
+# The network namespaces the SDV agents enter, with loopback only (one device, no mesh);
+# without them the agents never start and the others loop on servicemanager.
+service sdv-sd-mesh-local /product/bin/ethernet/ethernet_sd_mesh_local.sh
+    class core
+    user root
+    group shell
+    stdio_to_kmsg
+    disabled
+    oneshot
+
+# on the agents' own trigger (parsed before sdv.agents.rc, so it runs first): at post-fs the
+# bind mount would stay in the bootstrap mount namespace
+on property:ro.sdv.orchestrator.state.ready=true
+    exec_start sdv-sd-mesh-local

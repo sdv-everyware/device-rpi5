@@ -1,0 +1,6 @@
+# net/net_bringup.sh and its wpa_supplicant; permissive while the denials are collected
+type net_bringup, domain;
+type net_bringup_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(net_bringup)
+permissive net_bringup;
+domain_auto_trans(net_bringup, dhcpclient_exec, dhcpclient)

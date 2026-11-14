@@ -1,0 +1,10 @@
+# The Wi-Fi service bundle (system_ext/wifi_service_bundle.te) and the supplicant's control
+# interface: an abstract unix datagram socket served by wpa_supplicant in the net_bringup
+# domain (-g@abstract:wpa_everyware, net/net_bringup.sh). No file, so no DAC: this rule
+# alone decides who may command the supplicant. A socket between a core and a vendor domain
+# is a Treble violation in general; this image has no framework and owns both sides, so the
+# bundle is marked as a violator on purpose (bundles/wifi/README.md).
+# the supplicant's domain answers on the same socket
+typeattribute net_bringup socket_between_core_and_vendor_violators;
+allow wifi_service_bundle net_bringup:unix_dgram_socket sendto;
+allow net_bringup wifi_service_bundle:unix_dgram_socket sendto;
